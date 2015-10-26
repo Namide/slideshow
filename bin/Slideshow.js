@@ -80,9 +80,19 @@ var sl_Slideshow = function(slElmt) {
 	this.html.prepend("<div></div>");
 	this.html.prepend("<div></div>");
 	this.html.prepend("<div></div>");
-	this.graphicThumbs = js.JQuery(this.html.find("div")[2]);
+	this.html.prepend("<div></div>");
+	this.graphicThumbs = js.JQuery(this.html.find("div")[3]);
+	this.graphicMenu = js.JQuery(this.html.find("div")[2]);
 	this.graphicMsg = js.JQuery(this.html.find("div")[1]);
 	this.graphicImgs = js.JQuery(this.html.find("div")[0]);
+	this.graphicThumbs.css("padding","24px");
+	this.graphicThumbs.css("width","100%");
+	this.graphicThumbs.css("height","100%");
+	this.graphicThumbs.css("overflow","auto");
+	this.graphicThumbs.css("boxSizing","border-box");
+	this.graphicThumbs.css("textAlign","center");
+	this.graphicThumbs.css("position","relative");
+	this.graphicThumbs.css("backgroundColor","rgba(0,0,0,0.75)");
 	this.allSlides = [];
 	this.filteredSlides = [];
 	this.html.find(">li").each(function(id,elmt) {
@@ -93,24 +103,19 @@ var sl_Slideshow = function(slElmt) {
 		_g.graphicImgs.append(slide.img.html);
 		_g.graphicMsg.append(slide.text.html);
 		var thumb = slide.thumb;
-		thumb.css("zIndex","1");
+		thumb.css("display","inline-block");
 		thumb.css("position","relative");
-		thumb.css("verticalAlign","middle");
-		thumb.css("margin","8px 0");
+		thumb.css("border","8px solid black");
 		thumb.css("transition","border 0.5s, margin 0.5s");
 		thumb.click(function() {
 			_g.go(id1);
 			return true;
 		});
 		thumb.hover(function(evt) {
-			thumb.css("borderBottom","8px solid black");
-			thumb.css("borderTop","8px solid black");
-			thumb.css("margin","0");
+			thumb.css("border","8px solid white");
 			thumb.css("cursor","pointer");
 		},function(evt1) {
-			thumb.css("borderBottom","0px solid black");
-			thumb.css("borderTop","0px solid black");
-			thumb.css("margin","8px 0");
+			thumb.css("border","8px solid black");
 			thumb.css("cursor","inherit");
 		});
 		_g.graphicThumbs.append(thumb);
@@ -187,5 +192,3 @@ var js = js || {}
 js.JQuery = q;
 sl_Main.main();
 })(typeof console != "undefined" ? console : {log:function(){}});
-
-//# sourceMappingURL=Slideshow.js.map

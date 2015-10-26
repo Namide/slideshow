@@ -14,6 +14,7 @@ class Elmt
 	{
 		html = new JQuery(elmt);
 		html.css("position", "absolute");
+		//html.css("zIndex", "-1");
 	}
 	
 }

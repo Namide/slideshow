@@ -17,6 +17,7 @@ class Slideshow
 	public var graphicImgs:JQuery;
 	public var graphicMsg:JQuery;
 	public var graphicThumbs:JQuery;
+	public var graphicMenu:JQuery;
 	
 	
 	public var current:Int = 0;
@@ -29,10 +30,21 @@ class Slideshow
 		html.prepend("<div></div>");
 		html.prepend("<div></div>");
 		html.prepend("<div></div>");
+		html.prepend("<div></div>");
 		
-		graphicThumbs = new JQuery(html.find("div")[2]);
+		graphicThumbs = new JQuery(html.find("div")[3]);
+		graphicMenu = new JQuery(html.find("div")[2]);
 		graphicMsg = new JQuery(html.find("div")[1]);
 		graphicImgs = new JQuery(html.find("div")[0]);
+		
+		graphicThumbs.css("padding", "24px");
+		graphicThumbs.css("width", "100%");
+		graphicThumbs.css("height", "100%");
+		graphicThumbs.css("overflow", "auto");
+		graphicThumbs.css("boxSizing", "border-box");
+		graphicThumbs.css("textAlign", "center");
+		graphicThumbs.css("position", "relative");
+		graphicThumbs.css("backgroundColor", "rgba(0,0,0,0.75)");
 		
 		allSlides = [];
 		filteredSlides = [];
@@ -52,25 +64,23 @@ class Slideshow
 			graphicThumbs.append(thumb);*/
 			
 			var thumb = slide.thumb;
-			thumb.css("zIndex", "1");
+			//thumb.css("zIndex", "1");
+			thumb.css("display", "inline-block");
 			thumb.css("position", "relative");
-			thumb.css("verticalAlign", "middle");
-			thumb.css("margin", "8px 0");
+			//thumb.css("float", "center");
+			thumb.css("border", "8px solid black");
+			//thumb.css("margin", "8px");
 			thumb.css("transition", "border 0.5s, margin 0.5s");
 			
 			thumb.click(function() { go(id); return true; } );
 			thumb.hover(function(evt:JqEvent) { 
 				
-					thumb.css("borderBottom", "8px solid black");
-					thumb.css("borderTop", "8px solid black");
-					thumb.css("margin", "0");
+					thumb.css("border", "8px solid white");
 					thumb.css("cursor", "pointer");
 					
 				} , function(evt:JqEvent) {
 				
-					thumb.css("borderBottom", "0px solid black");
-					thumb.css("borderTop", "0px solid black");
-					thumb.css("margin", "8px 0");
+					thumb.css("border", "8px solid black");
 					thumb.css("cursor", "inherit");
 			} );
 			
