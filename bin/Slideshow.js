@@ -74,6 +74,7 @@ sl_Slide.prototype = {
 	}
 };
 var sl_Slideshow = function(slElmt) {
+	this.infosOpen = true;
 	this.current = 0;
 	var _g = this;
 	this.html = js.JQuery(slElmt);
@@ -81,10 +82,10 @@ var sl_Slideshow = function(slElmt) {
 	this.html.prepend("<div></div>");
 	this.html.prepend("<div></div>");
 	this.html.prepend("<div></div>");
-	this.graphicThumbs = js.JQuery(this.html.find("div")[3]);
-	this.graphicMenu = js.JQuery(this.html.find("div")[2]);
-	this.graphicMsg = js.JQuery(this.html.find("div")[1]);
 	this.graphicImgs = js.JQuery(this.html.find("div")[0]);
+	this.graphicMsg = js.JQuery(this.html.find("div")[1]);
+	this.graphicMenu = js.JQuery(this.html.find("div")[2]);
+	this.graphicThumbs = js.JQuery(this.html.find("div")[3]);
 	this.graphicThumbs.css("padding","24px");
 	this.graphicThumbs.css("width","100%");
 	this.graphicThumbs.css("height","100%");
@@ -93,6 +94,11 @@ var sl_Slideshow = function(slElmt) {
 	this.graphicThumbs.css("textAlign","center");
 	this.graphicThumbs.css("position","relative");
 	this.graphicThumbs.css("backgroundColor","rgba(0,0,0,0.75)");
+	this.graphicThumbs.click(function() {
+		_g.graphicThumbs.fadeOut(500);
+		return true;
+	});
+	this.graphicThumbs.css("display","none");
 	this.allSlides = [];
 	this.filteredSlides = [];
 	this.html.find(">li").each(function(id,elmt) {
@@ -123,12 +129,35 @@ var sl_Slideshow = function(slElmt) {
 	this.html.find(">li").each(function(id2,elmt1) {
 		js.JQuery(elmt1).remove();
 	});
+	this.initMenu();
 	this.go(this.current);
 	js.JQuery(window).resize($bind(this,this.onResize));
 	this.html.resize($bind(this,this.onResize));
 };
 sl_Slideshow.prototype = {
-	addSlide: function(id) {
+	initMenu: function() {
+		var _g = this;
+		this.graphicMenu.prepend("<div></div>");
+		var menu = js.JQuery(this.graphicMenu.find("div")[0]);
+		menu.addClass("menu");
+		menu.css("position","absolute");
+		var i = js.JQuery("<a href=\"#\">&nbsp;i&nbsp;</a>");
+		i.css("textDecoration",this.infosOpen?"line-through":"none");
+		i.click(function() {
+			_g.infosOpen = !_g.infosOpen;
+			if(_g.infosOpen) _g.graphicMsg.fadeIn(500); else _g.graphicMsg.fadeOut(500);
+			i.css("textDecoration",_g.infosOpen?"line-through":"none");
+			return true;
+		});
+		menu.append(i);
+		var M = js.JQuery("<a href=\"#\">M</a>");
+		M.click(function() {
+			_g.graphicThumbs.fadeIn(500);
+			return true;
+		});
+		menu.append(M);
+	}
+	,addSlide: function(id) {
 		this.filteredSlides.push(id);
 	}
 	,go: function(id) {
@@ -192,3 +221,5 @@ var js = js || {}
 js.JQuery = q;
 sl_Main.main();
 })(typeof console != "undefined" ? console : {log:function(){}});
+
+//# sourceMappingURL=Slideshow.js.map

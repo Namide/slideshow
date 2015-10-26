@@ -6,6 +6,9 @@ html, body {
 	color:#FFF;
 	font: 15px arial, sans-serif;
 }
+a { color: #FFF; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
 .sl {
 	display:block;
 	width:100%;
@@ -19,4 +22,24 @@ html, body {
 	bottom: 0;
 	padding: 12px;
 	background-color: rgba( 0, 0, 0, 0.5 );
+}
+
+.sl .menu {
+	
+	bottom: 0;
+	right: 0;
+	padding: 8px;
+	background-color: rgba( 0, 0, 0, 0.5 );
+}
+
+.sl .menu a {
+	
+	/*margin: 6px;*/
+	padding: 0 12px;
+	border-left:1px solid #FFF;
+}
+
+.sl .menu a:first-child {
+	
+	border-left:none;
 }

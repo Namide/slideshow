@@ -15,5 +15,11 @@ table{border-collapse:collapse;border-spacing:0}
 hr{height:1px;border:0;border-top:1px solid #ccc;margin:1em 0}
 input,select{vertical-align:middle}
 html,body{height:100%;color:#FFF;font:15px arial,sans-serif;}
+a{color:#FFF;text-decoration:none;}
+a:hover{text-decoration:underline;}
 .sl{display:block;width:100%;height:100%;background-color:#000;}
 .sl figcaption{max-width:50%;bottom:0;padding:12px;background-color:rgba( 0,0,0,0.5 );}
+.sl .menu{bottom:0;right:0;padding:8px;background-color:rgba( 0,0,0,0.5 );}
+.sl .menu a{padding:0 12px;border-left:1px solid #FFF;}
+.sl .menu a:first-child{border-left:none;}
+

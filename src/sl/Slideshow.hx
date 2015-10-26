@@ -21,6 +21,7 @@ class Slideshow
 	
 	
 	public var current:Int = 0;
+	public var infosOpen:Bool = true;
 	public var allSlides:Array<Slide>;
 	public var filteredSlides:Array<Int>;
 	
@@ -32,10 +33,10 @@ class Slideshow
 		html.prepend("<div></div>");
 		html.prepend("<div></div>");
 		
-		graphicThumbs = new JQuery(html.find("div")[3]);
-		graphicMenu = new JQuery(html.find("div")[2]);
-		graphicMsg = new JQuery(html.find("div")[1]);
 		graphicImgs = new JQuery(html.find("div")[0]);
+		graphicMsg = new JQuery(html.find("div")[1]);
+		graphicMenu = new JQuery(html.find("div")[2]);
+		graphicThumbs = new JQuery(html.find("div")[3]);
 		
 		graphicThumbs.css("padding", "24px");
 		graphicThumbs.css("width", "100%");
@@ -45,6 +46,8 @@ class Slideshow
 		graphicThumbs.css("textAlign", "center");
 		graphicThumbs.css("position", "relative");
 		graphicThumbs.css("backgroundColor", "rgba(0,0,0,0.75)");
+		graphicThumbs.click(function() { graphicThumbs.fadeOut(500); return true; } );
+		graphicThumbs.css("display", "none");
 		
 		allSlides = [];
 		filteredSlides = [];
@@ -91,11 +94,49 @@ class Slideshow
 			new JQuery(elmt).remove();
 		});
 		
+		
+		initMenu();
+		
+		
 		go(current);
 		//resizeAll();
 		
+		
 		new JQuery(Browser.window).resize(onResize);
 		html.resize(onResize);
+	}
+	
+	public function initMenu() {
+		
+		graphicMenu.prepend("<div></div>");
+		
+		var menu = new JQuery(graphicMenu.find("div")[0]);
+		menu.addClass("menu");
+		menu.css("position", "absolute");
+		
+		// i
+		var i = new JQuery("<a href=\"#\">&nbsp;i&nbsp;</a>");
+		i.css("textDecoration", (infosOpen) ? "line-through" : "none" );
+		i.click(function() {
+			
+			infosOpen = !infosOpen;
+			
+			if (infosOpen)
+				graphicMsg.fadeIn(500);
+			else
+				graphicMsg.fadeOut(500);
+			
+			i.css("textDecoration", (infosOpen) ? "line-through" : "none" );
+			
+			return true;
+		} );
+		menu.append(i);
+		
+		// M
+		var M = new JQuery("<a href=\"#\">M</a>");
+		M.click(function() { graphicThumbs.fadeIn(500); return true; } );
+		menu.append(M);
+				
 	}
 	
 	public function addSlide(id:Int) {
