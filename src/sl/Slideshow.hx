@@ -87,6 +87,12 @@ class Slideshow
 					thumb.css("cursor", "inherit");
 			} );
 			
+			
+			thumb.load(function (evt:JqEvent) {
+				resizeThumb(thumb);
+			});
+			
+			
 			graphicThumbs.append(thumb);
 			
 		});
@@ -104,6 +110,40 @@ class Slideshow
 		
 		new JQuery(Browser.window).resize(onResize);
 		html.resize(onResize);
+	}
+	
+	public function resizeThumb(thumb:JQuery) {
+		
+		var wMax = 100;
+		var hMax = 100;
+		var pMax = wMax / hMax;
+		
+		var w = thumb.width();
+		var h = thumb.height();
+		var p = w / h;
+		
+		
+		// check if it's already resized
+		var getNum = function(s:String) { return Std.parseFloat( s.split("px").join("") ); };
+		if ( w + getNum(thumb.css("marginLeft")) + getNum(thumb.css("marginRight")) == wMax &&
+			 h + getNum(thumb.css("marginTop")) + getNum(thumb.css("marginBottom")) == hMax ) {
+			
+			return;
+		}
+		
+		
+		if (p > pMax) {
+	
+			thumb.width(wMax);
+			thumb.height(Math.round(wMax / p));
+			thumb.css("margin", Math.round((hMax - thumb.height()) / 2) + "px 0");
+			
+		} else {
+			
+			thumb.height(hMax);
+			thumb.width(Math.round(hMax * p));
+			thumb.css("margin", "0 " + Math.round((wMax - thumb.width()) / 2) + "px");
+		}
 	}
 	
 	public function initMenu() {
@@ -134,9 +174,17 @@ class Slideshow
 		
 		// M
 		var M = new JQuery("<a href=\"#\">M</a>");
-		M.click(function() { graphicThumbs.fadeIn(500); return true; } );
+		M.click(function() {
+			graphicThumbs.fadeIn(500);
+			graphicThumbs.find("img").each(function(id:Int, elmt:Element) {
+				resizeThumb(new JQuery(elmt));
+			} );
+			return true;
+			
+		} );
 		menu.append(M);
-				
+		
+		// ►◄≡‖  ■□●װ<>
 	}
 	
 	public function addSlide(id:Int) {

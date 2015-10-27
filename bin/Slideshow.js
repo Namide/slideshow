@@ -5,6 +5,10 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
+var Std = function() { };
+Std.parseFloat = function(x) {
+	return parseFloat(x);
+};
 var sl_Elmt = function(elmt) {
 	this.html = js.JQuery(elmt);
 	this.html.css("position","absolute");
@@ -124,6 +128,9 @@ var sl_Slideshow = function(slElmt) {
 			thumb.css("border","8px solid black");
 			thumb.css("cursor","inherit");
 		});
+		thumb.load(function(evt2) {
+			_g.resizeThumb(thumb);
+		});
 		_g.graphicThumbs.append(thumb);
 	});
 	this.html.find(">li").each(function(id2,elmt1) {
@@ -135,7 +142,28 @@ var sl_Slideshow = function(slElmt) {
 	this.html.resize($bind(this,this.onResize));
 };
 sl_Slideshow.prototype = {
-	initMenu: function() {
+	resizeThumb: function(thumb) {
+		var wMax = 100;
+		var hMax = 100;
+		var pMax = wMax / hMax;
+		var w = thumb.width();
+		var h = thumb.height();
+		var p = w / h;
+		var getNum = function(s) {
+			return Std.parseFloat(s.split("px").join(""));
+		};
+		if(w + getNum(thumb.css("marginLeft")) + getNum(thumb.css("marginRight")) == wMax && h + getNum(thumb.css("marginTop")) + getNum(thumb.css("marginBottom")) == hMax) return;
+		if(p > pMax) {
+			thumb.width(wMax);
+			thumb.height(Math.round(wMax / p));
+			thumb.css("margin",Math.round((hMax - thumb.height()) / 2) + "px 0");
+		} else {
+			thumb.height(hMax);
+			thumb.width(Math.round(hMax * p));
+			thumb.css("margin","0 " + Math.round((wMax - thumb.width()) / 2) + "px");
+		}
+	}
+	,initMenu: function() {
 		var _g = this;
 		this.graphicMenu.prepend("<div></div>");
 		var menu = js.JQuery(this.graphicMenu.find("div")[0]);
@@ -153,6 +181,9 @@ sl_Slideshow.prototype = {
 		var M = js.JQuery("<a href=\"#\">M</a>");
 		M.click(function() {
 			_g.graphicThumbs.fadeIn(500);
+			_g.graphicThumbs.find("img").each(function(id,elmt) {
+				_g.resizeThumb(js.JQuery(elmt));
+			});
 			return true;
 		});
 		menu.append(M);
