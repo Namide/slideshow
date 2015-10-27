@@ -97,7 +97,7 @@ var sl_Slideshow = function(slElmt) {
 	this.graphicThumbs.css("boxSizing","border-box");
 	this.graphicThumbs.css("textAlign","center");
 	this.graphicThumbs.css("position","relative");
-	this.graphicThumbs.css("backgroundColor","rgba(0,0,0,0.75)");
+	this.graphicThumbs.css("backgroundColor","rgba(0,0,0,0.95)");
 	this.graphicThumbs.click(function() {
 		_g.graphicThumbs.fadeOut(500);
 		return true;
@@ -113,6 +113,7 @@ var sl_Slideshow = function(slElmt) {
 		_g.graphicImgs.append(slide.img.html);
 		_g.graphicMsg.append(slide.text.html);
 		var thumb = slide.thumb;
+		thumb.attr("id","slThumb" + id1);
 		thumb.css("display","inline-block");
 		thumb.css("position","relative");
 		thumb.css("border","8px solid black");
@@ -180,6 +181,7 @@ sl_Slideshow.prototype = {
 		menu.append(i);
 		var M = js.JQuery("<a href=\"#\">M</a>");
 		M.click(function() {
+			_g.graphicThumbs.find("#slThumb" + _g.current).css("borderColor","#FFF");
 			_g.graphicThumbs.fadeIn(500);
 			_g.graphicThumbs.find("img").each(function(id,elmt) {
 				_g.resizeThumb(js.JQuery(elmt));
@@ -194,10 +196,12 @@ sl_Slideshow.prototype = {
 	,go: function(id) {
 		var slide;
 		if(id != this.current) {
+			this.graphicThumbs.find("#slThumb" + this.current).css("borderColor","#000");
 			slide = this.allSlides[this.current];
 			slide.hide();
 			this.current = id;
 		}
+		this.graphicThumbs.find("#slThumb" + this.current).css("borderColor","#FFF");
 		slide = this.allSlides[this.current];
 		slide.show();
 		this.resizeSlide(slide);

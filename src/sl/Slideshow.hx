@@ -45,7 +45,7 @@ class Slideshow
 		graphicThumbs.css("boxSizing", "border-box");
 		graphicThumbs.css("textAlign", "center");
 		graphicThumbs.css("position", "relative");
-		graphicThumbs.css("backgroundColor", "rgba(0,0,0,0.75)");
+		graphicThumbs.css("backgroundColor", "rgba(0,0,0,0.95)");
 		graphicThumbs.click(function() { graphicThumbs.fadeOut(500); return true; } );
 		graphicThumbs.css("display", "none");
 		
@@ -67,7 +67,7 @@ class Slideshow
 			graphicThumbs.append(thumb);*/
 			
 			var thumb = slide.thumb;
-			//thumb.css("zIndex", "1");
+			thumb.attr("id", "slThumb" + id);
 			thumb.css("display", "inline-block");
 			thumb.css("position", "relative");
 			//thumb.css("float", "center");
@@ -175,6 +175,7 @@ class Slideshow
 		// M
 		var M = new JQuery("<a href=\"#\">M</a>");
 		M.click(function() {
+			graphicThumbs.find("#slThumb" + current).css("borderColor", "#FFF");
 			graphicThumbs.fadeIn(500);
 			graphicThumbs.find("img").each(function(id:Int, elmt:Element) {
 				resizeThumb(new JQuery(elmt));
@@ -196,11 +197,13 @@ class Slideshow
 		var slide:Slide;
 		
 		if (id != current) {
+			graphicThumbs.find("#slThumb" + current).css("borderColor", "#000");
 			slide = allSlides[current];
 			slide.hide();
 			current = id;
 		}
 		
+		graphicThumbs.find("#slThumb" + current).css("borderColor", "#FFF");
 		slide = allSlides[current];
 		slide.show();
 		resizeSlide(slide);
