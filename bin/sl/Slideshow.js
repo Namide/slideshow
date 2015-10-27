@@ -67,12 +67,12 @@ var sl_Slide = function(elmt) {
 };
 sl_Slide.prototype = {
 	show: function(t) {
-		if(t == null) t = 500;
+		if(t == null) t = 1000;
 		this.img.show(t);
 		this.text.html.show(t);
 	}
 	,hide: function(t) {
-		if(t == null) t = 500;
+		if(t == null) t = 1000;
 		this.img.hide(t);
 		this.text.html.hide(t);
 	}
@@ -90,14 +90,8 @@ var sl_Slideshow = function(slElmt) {
 	this.graphicMsg = js.JQuery(this.html.find("div")[1]);
 	this.graphicMenu = js.JQuery(this.html.find("div")[2]);
 	this.graphicThumbs = js.JQuery(this.html.find("div")[3]);
-	this.graphicThumbs.css("padding","24px");
-	this.graphicThumbs.css("width","100%");
-	this.graphicThumbs.css("height","100%");
-	this.graphicThumbs.css("overflow","auto");
-	this.graphicThumbs.css("boxSizing","border-box");
-	this.graphicThumbs.css("textAlign","center");
+	this.graphicThumbs.addClass("thumbs");
 	this.graphicThumbs.css("position","relative");
-	this.graphicThumbs.css("backgroundColor","rgba(0,0,0,0.95)");
 	this.graphicThumbs.click(function() {
 		_g.graphicThumbs.fadeOut(500);
 		return true;
@@ -114,22 +108,12 @@ var sl_Slideshow = function(slElmt) {
 		_g.graphicMsg.append(slide.text.html);
 		var thumb = slide.thumb;
 		thumb.attr("id","slThumb" + id1);
-		thumb.css("display","inline-block");
-		thumb.css("position","relative");
-		thumb.css("border","8px solid black");
-		thumb.css("transition","border 0.5s, margin 0.5s");
+		thumb.addClass("thumb");
 		thumb.click(function() {
 			_g.go(id1);
 			return true;
 		});
-		thumb.hover(function(evt) {
-			thumb.css("border","8px solid white");
-			thumb.css("cursor","pointer");
-		},function(evt1) {
-			thumb.css("border","8px solid black");
-			thumb.css("cursor","inherit");
-		});
-		thumb.load(function(evt2) {
+		thumb.load(function(evt) {
 			_g.resizeThumb(thumb);
 		});
 		_g.graphicThumbs.append(thumb);
@@ -137,13 +121,26 @@ var sl_Slideshow = function(slElmt) {
 	this.html.find(">li").each(function(id2,elmt1) {
 		js.JQuery(elmt1).remove();
 	});
-	this.initMenu();
 	this.go(this.current);
+	this.play(false);
+	this.initMenu();
 	js.JQuery(window).resize($bind(this,this.onResize));
 	this.html.resize($bind(this,this.onResize));
 };
 sl_Slideshow.prototype = {
-	resizeThumb: function(thumb) {
+	play: function(changeImg) {
+		if(changeImg == null) changeImg = true;
+		if(changeImg) this.go(this.current + 1);
+		window.clearTimeout(this.playing);
+		this.playing = window.setTimeout($bind(this,this.play),3000);
+		this.html.find(".slPlayPause").html(this.playing > -1?"■":"►");
+	}
+	,pause: function() {
+		window.clearTimeout(this.playing);
+		this.playing = -1;
+		this.html.find(".slPlayPause").html(this.playing > -1?"■":"►");
+	}
+	,resizeThumb: function(thumb) {
 		var wMax = 100;
 		var hMax = 100;
 		var pMax = wMax / hMax;
@@ -179,9 +176,31 @@ sl_Slideshow.prototype = {
 			return true;
 		});
 		menu.append(i);
+		var left = js.JQuery("<a href=\"#\">Ӏ◄</a>");
+		left.css("letterSpacing","-4px");
+		left.click(function() {
+			_g.pause();
+			_g.go(_g.current - 1);
+			return true;
+		});
+		menu.append(left);
+		var pp = js.JQuery("<a href=\"#\" class=\"slPlayPause\">" + (this.playing > -1?"■":"►") + "</a>");
+		pp.click(function() {
+			if(_g.playing < 0) _g.play(); else _g.pause();
+			return true;
+		});
+		menu.append(pp);
+		var right = js.JQuery("<a href=\"#\">►Ӏ</a>");
+		right.css("letterSpacing","-4px");
+		right.click(function() {
+			_g.pause();
+			_g.go(_g.current + 1);
+			return true;
+		});
+		menu.append(right);
 		var M = js.JQuery("<a href=\"#\">M</a>");
 		M.click(function() {
-			_g.graphicThumbs.find("#slThumb" + _g.current).css("borderColor","#FFF");
+			_g.pause();
 			_g.graphicThumbs.fadeIn(500);
 			_g.graphicThumbs.find("img").each(function(id,elmt) {
 				_g.resizeThumb(js.JQuery(elmt));
@@ -195,13 +214,15 @@ sl_Slideshow.prototype = {
 	}
 	,go: function(id) {
 		var slide;
+		if(id < 0) id = this.allSlides.length - 1; else if(id >= this.allSlides.length) id = 0; else id = id;
 		if(id != this.current) {
-			this.graphicThumbs.find("#slThumb" + this.current).css("borderColor","#000");
+			this.graphicThumbs.find("#slThumb" + this.current).removeClass("selected");
+			console.log(this.current);
 			slide = this.allSlides[this.current];
 			slide.hide();
 			this.current = id;
 		}
-		this.graphicThumbs.find("#slThumb" + this.current).css("borderColor","#FFF");
+		this.graphicThumbs.find("#slThumb" + this.current).addClass("selected");
 		slide = this.allSlides[this.current];
 		slide.show();
 		this.resizeSlide(slide);

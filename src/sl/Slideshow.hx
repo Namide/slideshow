@@ -24,6 +24,7 @@ class Slideshow
 	public var infosOpen:Bool = true;
 	public var allSlides:Array<Slide>;
 	public var filteredSlides:Array<Int>;
+	public var playing:Int;
 	
 	public function new(slElmt:Element) {
 		
@@ -38,14 +39,8 @@ class Slideshow
 		graphicMenu = new JQuery(html.find("div")[2]);
 		graphicThumbs = new JQuery(html.find("div")[3]);
 		
-		graphicThumbs.css("padding", "24px");
-		graphicThumbs.css("width", "100%");
-		graphicThumbs.css("height", "100%");
-		graphicThumbs.css("overflow", "auto");
-		graphicThumbs.css("boxSizing", "border-box");
-		graphicThumbs.css("textAlign", "center");
+		graphicThumbs.addClass("thumbs");
 		graphicThumbs.css("position", "relative");
-		graphicThumbs.css("backgroundColor", "rgba(0,0,0,0.95)");
 		graphicThumbs.click(function() { graphicThumbs.fadeOut(500); return true; } );
 		graphicThumbs.css("display", "none");
 		
@@ -68,15 +63,14 @@ class Slideshow
 			
 			var thumb = slide.thumb;
 			thumb.attr("id", "slThumb" + id);
-			thumb.css("display", "inline-block");
+			thumb.addClass("thumb");
+			/*thumb.css("display", "inline-block");
 			thumb.css("position", "relative");
-			//thumb.css("float", "center");
 			thumb.css("border", "8px solid black");
-			//thumb.css("margin", "8px");
-			thumb.css("transition", "border 0.5s, margin 0.5s");
+			thumb.css("transition", "border 0.5s, margin 0.5s");*/
 			
 			thumb.click(function() { go(id); return true; } );
-			thumb.hover(function(evt:JqEvent) { 
+			/*thumb.hover(function(evt:JqEvent) { 
 				
 					thumb.css("border", "8px solid white");
 					thumb.css("cursor", "pointer");
@@ -85,7 +79,7 @@ class Slideshow
 				
 					thumb.css("border", "8px solid black");
 					thumb.css("cursor", "inherit");
-			} );
+			} );*/
 			
 			
 			thumb.load(function (evt:JqEvent) {
@@ -101,15 +95,38 @@ class Slideshow
 		});
 		
 		
+		go(current);
+		play(false);
+		
+		
+		
 		initMenu();
 		
 		
-		go(current);
 		//resizeAll();
 		
 		
 		new JQuery(Browser.window).resize(onResize);
 		html.resize(onResize);
+	}
+	
+	public function play(changeImg = true) {
+		
+		if (changeImg)
+			go(current + 1);
+		
+		Browser.window.clearTimeout(playing);
+		playing = Browser.window.setTimeout(play, 3000);
+		
+		html.find(".slPlayPause").html((playing>-1)?"■":"►");
+	}
+	
+	public function pause() {
+		
+		Browser.window.clearTimeout(playing);
+		playing = -1;
+		
+		html.find(".slPlayPause").html((playing>-1)?"■":"►");
 	}
 	
 	public function resizeThumb(thumb:JQuery) {
@@ -172,10 +189,50 @@ class Slideshow
 		} );
 		menu.append(i);
 		
+		// Ӏ<
+		var left = new JQuery("<a href=\"#\">Ӏ◄</a>");
+		left.css("letterSpacing", "-4px");
+		left.click(function() {
+			
+			pause();
+			go (current - 1);
+			return true;
+			
+		} );
+		menu.append(left);
+		
+		// ■ ►
+		var pp = new JQuery("<a href=\"#\" class=\"slPlayPause\">" + ((playing>-1)?"■":"►") + "</a>");
+		pp.click(function() {
+			
+			if (playing < 0)
+				play();
+			else {
+				pause();
+			}
+			
+			return true;
+		} );
+		menu.append(pp);
+		
+		// >Ӏ
+		var right = new JQuery("<a href=\"#\">►Ӏ</a>");
+		right.css("letterSpacing", "-4px");
+		right.click(function() {
+			
+			pause();
+			go (current + 1);
+			return true;
+			
+		} );
+		menu.append(right);
+		
+		
 		// M
 		var M = new JQuery("<a href=\"#\">M</a>");
 		M.click(function() {
-			graphicThumbs.find("#slThumb" + current).css("borderColor", "#FFF");
+			//graphicThumbs.find("#slThumb" + current).css("borderColor", "#FFF");
+			pause();
 			graphicThumbs.fadeIn(500);
 			graphicThumbs.find("img").each(function(id:Int, elmt:Element) {
 				resizeThumb(new JQuery(elmt));
@@ -186,6 +243,8 @@ class Slideshow
 		menu.append(M);
 		
 		// ►◄≡‖  ■□●װ<>
+		
+		
 	}
 	
 	public function addSlide(id:Int) {
@@ -196,14 +255,22 @@ class Slideshow
 		
 		var slide:Slide;
 		
+		id = (id < 0) ? (allSlides.length - 1) : (id >= allSlides.length) ? 0 : id;
+		
 		if (id != current) {
-			graphicThumbs.find("#slThumb" + current).css("borderColor", "#000");
+			//graphicThumbs.find("#slThumb" + current).css("borderColor", "#000");
+			
+			graphicThumbs.find("#slThumb" + current).removeClass("selected");
+			trace(current);
+			
 			slide = allSlides[current];
 			slide.hide();
 			current = id;
 		}
 		
-		graphicThumbs.find("#slThumb" + current).css("borderColor", "#FFF");
+		//graphicThumbs.find("#slThumb" + current).css("borderColor", "#FFF");
+		graphicThumbs.find("#slThumb" + current).addClass("selected");
+		
 		slide = allSlides[current];
 		slide.show();
 		resizeSlide(slide);

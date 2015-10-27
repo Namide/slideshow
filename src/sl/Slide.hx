@@ -37,14 +37,14 @@ class Slide
 		hide(0);
 	}
 	
-	public function show(t = 500) {
+	public function show(t = 1000) {
 		img.show(t);
 		text.show(t);
 		//img.html.fadeIn(t);
 		//text.html.show(t);
 	}
 	
-	public function hide(t = 500) {
+	public function hide(t = 1000) {
 		img.hide(t);
 		text.hide(t);
 		//img.html.fadeOut(t);
