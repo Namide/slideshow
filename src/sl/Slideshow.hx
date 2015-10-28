@@ -3,6 +3,7 @@ import js.Browser;
 import js.html.Element;
 import js.JQuery;
 import js.JQuery.JqEvent;
+import Screenfull;
 
 /**
  * ...
@@ -116,9 +117,11 @@ class Slideshow
 			go(current + 1);
 		
 		Browser.window.clearTimeout(playing);
-		playing = Browser.window.setTimeout(play, 3000);
+		playing = Browser.window.setTimeout(play, 5000);
 		
-		html.find(".slPlayPause").html((playing>-1)?"■":"►");
+		html.find(".slPlayPause").html((playing > -1)?"■":"►");
+		//html.find(".slPlayPause").css("fontSize", (playing > -1)?"150%":"100%");
+		
 	}
 	
 	public function pause() {
@@ -127,6 +130,7 @@ class Slideshow
 		playing = -1;
 		
 		html.find(".slPlayPause").html((playing>-1)?"■":"►");
+		//html.find(".slPlayPause").css("fontSize", (playing > -1)?"150%":"100%");
 	}
 	
 	public function resizeThumb(thumb:JQuery) {
@@ -228,8 +232,8 @@ class Slideshow
 		menu.append(right);
 		
 		
-		// M
-		var M = new JQuery("<a href=\"#\">M</a>");
+		// M ͏Ξ
+		var M = new JQuery("<a href=\"#\">Ξ</a>");
 		M.click(function() {
 			//graphicThumbs.find("#slThumb" + current).css("borderColor", "#FFF");
 			pause();
@@ -244,7 +248,22 @@ class Slideshow
 		
 		// ►◄≡‖  ■□●װ<>
 		
-		
+		// ۞ □
+		if (Screenfull.enabled) {
+			var f = new JQuery("<a href=\"#\">□</a>");
+			f.css("fontSize", "160%");
+			f.click(function() {
+				
+				if (Screenfull.isFullscreen)
+					Screenfull.exit();
+				else
+					Screenfull.request(html.get(0));
+				
+				return true;
+				
+			} );
+			menu.append(f);
+		}
 	}
 	
 	public function addSlide(id:Int) {
@@ -261,7 +280,7 @@ class Slideshow
 			//graphicThumbs.find("#slThumb" + current).css("borderColor", "#000");
 			
 			graphicThumbs.find("#slThumb" + current).removeClass("selected");
-			trace(current);
+			//trace(current);
 			
 			slide = allSlides[current];
 			slide.hide();

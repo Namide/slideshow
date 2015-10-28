@@ -132,7 +132,7 @@ sl_Slideshow.prototype = {
 		if(changeImg == null) changeImg = true;
 		if(changeImg) this.go(this.current + 1);
 		window.clearTimeout(this.playing);
-		this.playing = window.setTimeout($bind(this,this.play),3000);
+		this.playing = window.setTimeout($bind(this,this.play),5000);
 		this.html.find(".slPlayPause").html(this.playing > -1?"■":"►");
 	}
 	,pause: function() {
@@ -198,7 +198,7 @@ sl_Slideshow.prototype = {
 			return true;
 		});
 		menu.append(right);
-		var M = js.JQuery("<a href=\"#\">M</a>");
+		var M = js.JQuery("<a href=\"#\">Ξ</a>");
 		M.click(function() {
 			_g.pause();
 			_g.graphicThumbs.fadeIn(500);
@@ -208,6 +208,15 @@ sl_Slideshow.prototype = {
 			return true;
 		});
 		menu.append(M);
+		if(Screenfull.enabled) {
+			var f = js.JQuery("<a href=\"#\">□</a>");
+			f.css("fontSize","160%");
+			f.click(function() {
+				if(Screenfull.isFullscreen) Screenfull.exit(); else Screenfull.request(_g.html.get(0));
+				return true;
+			});
+			menu.append(f);
+		}
 	}
 	,addSlide: function(id) {
 		this.filteredSlides.push(id);
@@ -217,7 +226,6 @@ sl_Slideshow.prototype = {
 		if(id < 0) id = this.allSlides.length - 1; else if(id >= this.allSlides.length) id = 0; else id = id;
 		if(id != this.current) {
 			this.graphicThumbs.find("#slThumb" + this.current).removeClass("selected");
-			console.log(this.current);
 			slide = this.allSlides[this.current];
 			slide.hide();
 			this.current = id;
