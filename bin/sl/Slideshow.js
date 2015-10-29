@@ -168,6 +168,7 @@ sl_Slideshow.prototype = {
 		menu.addClass("menu");
 		menu.css("position","absolute");
 		var i = js.JQuery("<a href=\"#\">&nbsp;i&nbsp;</a>");
+		i.addClass("info");
 		i.css("textDecoration",this.infosOpen?"line-through":"none");
 		i.click(function() {
 			_g.infosOpen = !_g.infosOpen;
@@ -177,6 +178,7 @@ sl_Slideshow.prototype = {
 		});
 		menu.append(i);
 		var left = js.JQuery("<a href=\"#\">Ӏ◄</a>");
+		left.addClass("left");
 		left.css("letterSpacing","-4px");
 		left.click(function() {
 			_g.pause();
@@ -185,12 +187,14 @@ sl_Slideshow.prototype = {
 		});
 		menu.append(left);
 		var pp = js.JQuery("<a href=\"#\" class=\"slPlayPause\">" + (this.playing > -1?"■":"►") + "</a>");
+		pp.addClass("play");
 		pp.click(function() {
 			if(_g.playing < 0) _g.play(); else _g.pause();
 			return true;
 		});
 		menu.append(pp);
 		var right = js.JQuery("<a href=\"#\">►Ӏ</a>");
+		right.addClass("right");
 		right.css("letterSpacing","-4px");
 		right.click(function() {
 			_g.pause();
@@ -199,6 +203,7 @@ sl_Slideshow.prototype = {
 		});
 		menu.append(right);
 		var M = js.JQuery("<a href=\"#\">Ξ</a>");
+		M.addClass("M");
 		M.click(function() {
 			_g.pause();
 			_g.graphicThumbs.fadeIn(500);
@@ -210,6 +215,7 @@ sl_Slideshow.prototype = {
 		menu.append(M);
 		if(Screenfull.enabled) {
 			var f = js.JQuery("<a href=\"#\">□</a>");
+			f.addClass("fullscreen");
 			f.css("fontSize","160%");
 			f.click(function() {
 				if(Screenfull.isFullscreen) Screenfull.exit(); else Screenfull.request(_g.html.get(0));

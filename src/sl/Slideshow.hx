@@ -177,6 +177,7 @@ class Slideshow
 		
 		// i
 		var i = new JQuery("<a href=\"#\">&nbsp;i&nbsp;</a>");
+		i.addClass("info");
 		i.css("textDecoration", (infosOpen) ? "line-through" : "none" );
 		i.click(function() {
 			
@@ -195,6 +196,7 @@ class Slideshow
 		
 		// Ӏ<
 		var left = new JQuery("<a href=\"#\">Ӏ◄</a>");
+		left.addClass("left");
 		left.css("letterSpacing", "-4px");
 		left.click(function() {
 			
@@ -207,6 +209,7 @@ class Slideshow
 		
 		// ■ ►
 		var pp = new JQuery("<a href=\"#\" class=\"slPlayPause\">" + ((playing>-1)?"■":"►") + "</a>");
+		pp.addClass("play");
 		pp.click(function() {
 			
 			if (playing < 0)
@@ -221,6 +224,7 @@ class Slideshow
 		
 		// >Ӏ
 		var right = new JQuery("<a href=\"#\">►Ӏ</a>");
+		right.addClass("right");
 		right.css("letterSpacing", "-4px");
 		right.click(function() {
 			
@@ -234,6 +238,7 @@ class Slideshow
 		
 		// M ͏Ξ
 		var M = new JQuery("<a href=\"#\">Ξ</a>");
+		M.addClass("M");
 		M.click(function() {
 			//graphicThumbs.find("#slThumb" + current).css("borderColor", "#FFF");
 			pause();
@@ -251,6 +256,7 @@ class Slideshow
 		// ۞ □
 		if (Screenfull.enabled) {
 			var f = new JQuery("<a href=\"#\">□</a>");
+			f.addClass("fullscreen");
 			f.css("fontSize", "160%");
 			f.click(function() {
 				
