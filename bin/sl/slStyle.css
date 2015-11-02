@@ -24,6 +24,14 @@ a:hover { text-decoration: underline; }
 	background-color: rgba( 0, 0, 0, 0.5 );
 }
 
+.sl figcaption .slClose {
+	
+	top: 0;
+	right: 0;
+	
+	background-position: 0 -64px;
+}
+
 .sl .menu {
 	
 	bottom: 0;
@@ -38,14 +46,18 @@ a:hover { text-decoration: underline; }
 	
 	display:block;
 	/*padding: 12px;*/
-	width: 25px;
-	height: 25px;
+	width: 32px;
+	height: 32px;
 	position: absolute;
 	box-sizing: border-box;
 	margin: 10px;
 	text-align:center;
 	/*border-left:1px solid #FFF;
 	background-color: rgba( 0, 0, 0, 0.5 );*/
+	
+	
+	background-image: url("sl-icons.svg");
+	
 }
 
 /*.sl .menu a:first-child {
@@ -53,35 +65,62 @@ a:hover { text-decoration: underline; }
 	border-left:none;
 }*/
 
-.sl .menu .info {
+.sl .menu .slInfo {
 	
 	bottom: 0;
 	right: 0;
+	
+	background-position: -32px -32px;
 }
-.sl .menu .left {
+.sl .menu .slLeft {
 	
 	bottom: 0;
 	right: 180px;
+	
+	background-position: -32px 0;
 }
-.sl .menu .play {
+.sl .menu .slPlay {
 	
 	bottom: 0;
 	right: 140px;
+	
+	background-position: -96px 0;
 }
-.sl .menu .right {
+.sl .menu .slPause {
+	
+	bottom: 0;
+	right: 140px;
+	
+	background-position: -64px 0;
+}
+.sl .menu .slRight {
 	
 	bottom: 0;
 	right: 100px;
+	
+	background-position: 0 0;
 }
-.sl .menu .M {
+.sl .menu .slMenu {
 	
 	top: 0;
 	right: 50px;
+	
+	background-position: 0 -32px;
 }
-.sl .menu .fullscreen {
+.sl .menu .slFullscreen {
 	
 	top: 0;
 	right: 0;
+	
+	background-position: -96px -32px;
+}
+
+.sl .menu .slWindowed {
+	
+	top: 0;
+	right: 0;
+	
+	background-position: 0 -64px;
 }
 
 .sl .thumbs {

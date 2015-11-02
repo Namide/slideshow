@@ -57,6 +57,29 @@ class Slideshow
 			graphicImgs.append(slide.img.html);
 			graphicMsg.append(slide.text.html);
 			
+			
+			
+			
+			
+			
+			
+			var close = new JQuery("<a href=\"#\"></a>");
+			close.addClass("slClose");
+			//i.css("textDecoration", (infosOpen) ? "line-through" : "none" );
+			close.click(function() {
+				
+				infosOpen = false;
+				new JQuery(slide.text.html).fadeIn(500);
+				html.find(".slClose").fadeIn(500);
+				
+				return true;
+			} );
+			new JQuery(slide.text.html).prepend(close);
+			
+			
+			
+			
+			
 			/*var thumb = new JQuery("<a href=\"#\"></a>");
 			thumb.append(slide.thumb);
 			thumb.click(function() { go(id); return true; } );
@@ -119,7 +142,8 @@ class Slideshow
 		Browser.window.clearTimeout(playing);
 		playing = Browser.window.setTimeout(play, 5000);
 		
-		html.find(".slPlayPause").html((playing > -1)?"■":"►");
+		html.find(".slPlay").css("display", "none");
+		html.find(".slPause").css("display", "block");
 		//html.find(".slPlayPause").css("fontSize", (playing > -1)?"150%":"100%");
 		
 	}
@@ -129,7 +153,8 @@ class Slideshow
 		Browser.window.clearTimeout(playing);
 		playing = -1;
 		
-		html.find(".slPlayPause").html((playing>-1)?"■":"►");
+		html.find(".slPlay").css("display", "block");
+		html.find(".slPause").css("display", "none");
 		//html.find(".slPlayPause").css("fontSize", (playing > -1)?"150%":"100%");
 	}
 	
@@ -176,28 +201,30 @@ class Slideshow
 		menu.css("position", "absolute");
 		
 		// i
-		var i = new JQuery("<a href=\"#\">&nbsp;i&nbsp;</a>");
-		i.addClass("info");
-		i.css("textDecoration", (infosOpen) ? "line-through" : "none" );
+		var i = new JQuery("<a href=\"#\"></a>");
+		i.addClass("slInfo");
+		//i.css("textDecoration", (infosOpen) ? "line-through" : "none" );
 		i.click(function() {
 			
-			infosOpen = !infosOpen;
+			infosOpen = true;
 			
-			if (infosOpen)
+			/*if (infosOpen)
 				graphicMsg.fadeIn(500);
-			else
-				graphicMsg.fadeOut(500);
+			else*/
 			
-			i.css("textDecoration", (infosOpen) ? "line-through" : "none" );
+			graphicMsg.fadeIn(500);
+			i.css("display", "none");
+			
+			//i.css("textDecoration", (infosOpen) ? "line-through" : "none" );
+			//i.css("textDecoration", (infosOpen) ? "line-through" : "none" );
 			
 			return true;
 		} );
 		menu.append(i);
 		
 		// Ӏ<
-		var left = new JQuery("<a href=\"#\">Ӏ◄</a>");
-		left.addClass("left");
-		left.css("letterSpacing", "-4px");
+		var left = new JQuery("<a href=\"#\"></a>");
+		left.addClass("slLeft");
 		left.click(function() {
 			
 			pause();
@@ -208,24 +235,28 @@ class Slideshow
 		menu.append(left);
 		
 		// ■ ►
-		var pp = new JQuery("<a href=\"#\" class=\"slPlayPause\">" + ((playing>-1)?"■":"►") + "</a>");
-		pp.addClass("play");
-		pp.click(function() {
+		var playUI = new JQuery("<a href=\"#\"></a>");
+		playUI.addClass("slPlay");
+		playUI.click(function() {
 			
-			if (playing < 0)
-				play();
-			else {
-				pause();
-			}
-			
+			play();
 			return true;
 		} );
-		menu.append(pp);
+		menu.append(playUI);
+		
+		// ■ ►
+		var pauseUI = new JQuery("<a href=\"#\"></a>");
+		pauseUI.addClass("slPause");
+		pauseUI.click(function() {
+			
+			pause();
+			return true;
+		} );
+		menu.append(pauseUI);
 		
 		// >Ӏ
-		var right = new JQuery("<a href=\"#\">►Ӏ</a>");
-		right.addClass("right");
-		right.css("letterSpacing", "-4px");
+		var right = new JQuery("<a href=\"#\"></a>");
+		right.addClass("slRight");
 		right.click(function() {
 			
 			pause();
@@ -237,8 +268,8 @@ class Slideshow
 		
 		
 		// M ͏Ξ
-		var M = new JQuery("<a href=\"#\">Ξ</a>");
-		M.addClass("M");
+		var M = new JQuery("<a href=\"#\"></a>");
+		M.addClass("slMenu");
 		M.click(function() {
 			//graphicThumbs.find("#slThumb" + current).css("borderColor", "#FFF");
 			pause();
@@ -255,20 +286,34 @@ class Slideshow
 		
 		// ۞ □
 		if (Screenfull.enabled) {
-			var f = new JQuery("<a href=\"#\">□</a>");
-			f.addClass("fullscreen");
-			f.css("fontSize", "160%");
+			
+			var f = new JQuery("<a href=\"#\"></a>");
+			var w = new JQuery("<a href=\"#\"></a>");
+			
+			f.addClass("slFullscreen");
+			w.addClass("slWindowed");
+			
 			f.click(function() {
 				
-				if (Screenfull.isFullscreen)
-					Screenfull.exit();
-				else
-					Screenfull.request(html.get(0));
-				
+				Screenfull.request(html.get(0));
+				w.css("display", "block");
+				f.css("display", "none");
 				return true;
 				
 			} );
 			menu.append(f);
+		
+			w.click(function() {
+				
+				Screenfull.exit();
+				f.css("display", "block");
+				w.css("display", "none");
+				return true;
+				
+			} );
+			menu.append(w);
+			
+			w.css("display", "none");
 		}
 	}
 	

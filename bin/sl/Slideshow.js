@@ -106,6 +106,15 @@ var sl_Slideshow = function(slElmt) {
 		_g.allSlides.push(slide);
 		_g.graphicImgs.append(slide.img.html);
 		_g.graphicMsg.append(slide.text.html);
+		var close = js.JQuery("<a href=\"#\"></a>");
+		close.addClass("slClose");
+		close.click(function() {
+			_g.infosOpen = false;
+			js.JQuery(slide.text.html).fadeIn(500);
+			_g.html.find(".slClose").fadeIn(500);
+			return true;
+		});
+		js.JQuery(slide.text.html).prepend(close);
 		var thumb = slide.thumb;
 		thumb.attr("id","slThumb" + id1);
 		thumb.addClass("thumb");
@@ -133,12 +142,14 @@ sl_Slideshow.prototype = {
 		if(changeImg) this.go(this.current + 1);
 		window.clearTimeout(this.playing);
 		this.playing = window.setTimeout($bind(this,this.play),5000);
-		this.html.find(".slPlayPause").html(this.playing > -1?"■":"►");
+		this.html.find(".slPlay").css("display","none");
+		this.html.find(".slPause").css("display","block");
 	}
 	,pause: function() {
 		window.clearTimeout(this.playing);
 		this.playing = -1;
-		this.html.find(".slPlayPause").html(this.playing > -1?"■":"►");
+		this.html.find(".slPlay").css("display","block");
+		this.html.find(".slPause").css("display","none");
 	}
 	,resizeThumb: function(thumb) {
 		var wMax = 100;
@@ -167,43 +178,47 @@ sl_Slideshow.prototype = {
 		var menu = js.JQuery(this.graphicMenu.find("div")[0]);
 		menu.addClass("menu");
 		menu.css("position","absolute");
-		var i = js.JQuery("<a href=\"#\">&nbsp;i&nbsp;</a>");
-		i.addClass("info");
-		i.css("textDecoration",this.infosOpen?"line-through":"none");
+		var i = js.JQuery("<a href=\"#\"></a>");
+		i.addClass("slInfo");
 		i.click(function() {
-			_g.infosOpen = !_g.infosOpen;
-			if(_g.infosOpen) _g.graphicMsg.fadeIn(500); else _g.graphicMsg.fadeOut(500);
-			i.css("textDecoration",_g.infosOpen?"line-through":"none");
+			_g.infosOpen = true;
+			_g.graphicMsg.fadeIn(500);
+			i.css("display","none");
 			return true;
 		});
 		menu.append(i);
-		var left = js.JQuery("<a href=\"#\">Ӏ◄</a>");
-		left.addClass("left");
-		left.css("letterSpacing","-4px");
+		var left = js.JQuery("<a href=\"#\"></a>");
+		left.addClass("slLeft");
 		left.click(function() {
 			_g.pause();
 			_g.go(_g.current - 1);
 			return true;
 		});
 		menu.append(left);
-		var pp = js.JQuery("<a href=\"#\" class=\"slPlayPause\">" + (this.playing > -1?"■":"►") + "</a>");
-		pp.addClass("play");
-		pp.click(function() {
-			if(_g.playing < 0) _g.play(); else _g.pause();
+		var playUI = js.JQuery("<a href=\"#\"></a>");
+		playUI.addClass("slPlay");
+		playUI.click(function() {
+			_g.play();
 			return true;
 		});
-		menu.append(pp);
-		var right = js.JQuery("<a href=\"#\">►Ӏ</a>");
-		right.addClass("right");
-		right.css("letterSpacing","-4px");
+		menu.append(playUI);
+		var pauseUI = js.JQuery("<a href=\"#\"></a>");
+		pauseUI.addClass("slPause");
+		pauseUI.click(function() {
+			_g.pause();
+			return true;
+		});
+		menu.append(pauseUI);
+		var right = js.JQuery("<a href=\"#\"></a>");
+		right.addClass("slRight");
 		right.click(function() {
 			_g.pause();
 			_g.go(_g.current + 1);
 			return true;
 		});
 		menu.append(right);
-		var M = js.JQuery("<a href=\"#\">Ξ</a>");
-		M.addClass("M");
+		var M = js.JQuery("<a href=\"#\"></a>");
+		M.addClass("slMenu");
 		M.click(function() {
 			_g.pause();
 			_g.graphicThumbs.fadeIn(500);
@@ -214,14 +229,25 @@ sl_Slideshow.prototype = {
 		});
 		menu.append(M);
 		if(Screenfull.enabled) {
-			var f = js.JQuery("<a href=\"#\">□</a>");
-			f.addClass("fullscreen");
-			f.css("fontSize","160%");
+			var f = js.JQuery("<a href=\"#\"></a>");
+			var w = js.JQuery("<a href=\"#\"></a>");
+			f.addClass("slFullscreen");
+			w.addClass("slWindowed");
 			f.click(function() {
-				if(Screenfull.isFullscreen) Screenfull.exit(); else Screenfull.request(_g.html.get(0));
+				Screenfull.request(_g.html.get(0));
+				w.css("display","block");
+				f.css("display","none");
 				return true;
 			});
 			menu.append(f);
+			w.click(function() {
+				Screenfull.exit();
+				f.css("display","block");
+				w.css("display","none");
+				return true;
+			});
+			menu.append(w);
+			w.css("display","none");
 		}
 	}
 	,addSlide: function(id) {
