@@ -36,14 +36,24 @@ class Slideshow
 		html.prepend("<div></div>");
 		
 		graphicImgs = new JQuery(html.find("div")[0]);
-		graphicMsg = new JQuery(html.find("div")[1]);
-		graphicMenu = new JQuery(html.find("div")[2]);
+		graphicMenu = new JQuery(html.find("div")[1]);
+		graphicMsg = new JQuery(html.find("div")[2]);
 		graphicThumbs = new JQuery(html.find("div")[3]);
+		
+		var close = new JQuery("<a href=\"#\"></a>");
+		close.addClass("slClose");
+		//close.css("zIndex", "5");
+		close.click(function() { graphicThumbs.fadeOut(500); return true; } );
+		graphicThumbs.prepend(close);
 		
 		graphicThumbs.addClass("thumbs");
 		graphicThumbs.css("position", "relative");
 		graphicThumbs.click(function() { graphicThumbs.fadeOut(500); return true; } );
 		graphicThumbs.css("display", "none");
+		
+		
+		
+		
 		
 		allSlides = [];
 		filteredSlides = [];
@@ -59,22 +69,19 @@ class Slideshow
 			
 			
 			
-			
-			
-			
-			
-			var close = new JQuery("<a href=\"#\"></a>");
+			close = new JQuery("<a href=\"#\"></a>");
 			close.addClass("slClose");
+			//close.css("zIndex", "1");
 			//i.css("textDecoration", (infosOpen) ? "line-through" : "none" );
 			close.click(function() {
 				
 				infosOpen = false;
-				new JQuery(slide.text.html).fadeIn(500);
-				html.find(".slClose").fadeIn(500);
+				graphicMsg.fadeOut(500);
+				html.find(".slInfo").fadeIn(500);
 				
 				return true;
 			} );
-			new JQuery(slide.text.html).prepend(close);
+			slide.text.html.prepend(close);
 			
 			
 			
@@ -203,7 +210,7 @@ class Slideshow
 		// i
 		var i = new JQuery("<a href=\"#\"></a>");
 		i.addClass("slInfo");
-		//i.css("textDecoration", (infosOpen) ? "line-through" : "none" );
+		i.css("display", (infosOpen) ? "none" : "block" );
 		i.click(function() {
 			
 			infosOpen = true;
@@ -213,7 +220,7 @@ class Slideshow
 			else*/
 			
 			graphicMsg.fadeIn(500);
-			i.css("display", "none");
+			i.fadeOut(500);
 			
 			//i.css("textDecoration", (infosOpen) ? "line-through" : "none" );
 			//i.css("textDecoration", (infosOpen) ? "line-through" : "none" );

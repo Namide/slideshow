@@ -19,15 +19,16 @@ a{color:#FFF;text-decoration:none;}
 a:hover{text-decoration:underline;}
 .sl{display:block;width:100%;height:100%;background-color:#000;}
 .sl figcaption{max-width:50%;bottom:0;padding:24px;background-color:rgba( 0,0,0,0.5 );}
-.sl figcaption .slClose{top:0;right:0;background-position:0 -64px;}
-.sl .menu{bottom:0;right:0;width:100%;height:100%;}
-.sl .menu a{display:block;width:32px;height:32px;position:absolute;box-sizing:border-box;margin:10px;text-align:center;background-image:url("sl-icons.svg");}
-.sl .menu .slInfo{bottom:0;right:0;background-position:-32px -32px;}
+.sl .menu{bottom:0;right:0;width:100%;height:100%;box-sizing:border-box;}
+.sl .menu a,.sl figcaption .slClose,.sl .thumbs .slClose{display:block;width:32px;height:32px;position:absolute;box-sizing:border-box;margin:10px;text-align:center;background-image:url("sl-icons.svg");border:1px rgba(0,0,0,0) solid;transition:border 0.2s ease-out;}
+.sl .menu a:hover,.sl figcaption .slClose:hover .sl .thumbs .slClose{border-color:rgba(255,255,255,1);}
+.sl figcaption .slClose{top:0;right:0;background-position:-64px -32px;}
+.sl .menu .slInfo{bottom:0;left:0;background-position:-32px -32px;}
 .sl .menu .slLeft{bottom:0;right:180px;background-position:-32px 0;}
 .sl .menu .slPlay{bottom:0;right:140px;background-position:-96px 0;}
 .sl .menu .slPause{bottom:0;right:140px;background-position:-64px 0;}
 .sl .menu .slRight{bottom:0;right:100px;background-position:0 0;}
-.sl .menu .slMenu{top:0;right:50px;background-position:0 -32px;}
+.sl .menu .slMenu{bottom:0;right:0;background-position:0 -32px;}
 .sl .menu .slFullscreen{top:0;right:0;background-position:-96px -32px;}
 .sl .menu .slWindowed{top:0;right:0;background-position:0 -64px;}
 .sl .thumbs{width:100%;height:100%;padding:24px;overflow:auto;box-sizing:border-box;text-align:center;background-color:rgba(0,0,0,0.95);}

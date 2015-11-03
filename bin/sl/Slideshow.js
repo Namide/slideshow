@@ -87,9 +87,16 @@ var sl_Slideshow = function(slElmt) {
 	this.html.prepend("<div></div>");
 	this.html.prepend("<div></div>");
 	this.graphicImgs = js.JQuery(this.html.find("div")[0]);
-	this.graphicMsg = js.JQuery(this.html.find("div")[1]);
-	this.graphicMenu = js.JQuery(this.html.find("div")[2]);
+	this.graphicMenu = js.JQuery(this.html.find("div")[1]);
+	this.graphicMsg = js.JQuery(this.html.find("div")[2]);
 	this.graphicThumbs = js.JQuery(this.html.find("div")[3]);
+	var close = js.JQuery("<a href=\"#\"></a>");
+	close.addClass("slClose");
+	close.click(function() {
+		_g.graphicThumbs.fadeOut(500);
+		return true;
+	});
+	this.graphicThumbs.prepend(close);
 	this.graphicThumbs.addClass("thumbs");
 	this.graphicThumbs.css("position","relative");
 	this.graphicThumbs.click(function() {
@@ -106,15 +113,15 @@ var sl_Slideshow = function(slElmt) {
 		_g.allSlides.push(slide);
 		_g.graphicImgs.append(slide.img.html);
 		_g.graphicMsg.append(slide.text.html);
-		var close = js.JQuery("<a href=\"#\"></a>");
+		close = js.JQuery("<a href=\"#\"></a>");
 		close.addClass("slClose");
 		close.click(function() {
 			_g.infosOpen = false;
-			js.JQuery(slide.text.html).fadeIn(500);
-			_g.html.find(".slClose").fadeIn(500);
+			_g.graphicMsg.fadeOut(500);
+			_g.html.find(".slInfo").fadeIn(500);
 			return true;
 		});
-		js.JQuery(slide.text.html).prepend(close);
+		slide.text.html.prepend(close);
 		var thumb = slide.thumb;
 		thumb.attr("id","slThumb" + id1);
 		thumb.addClass("thumb");
@@ -180,10 +187,11 @@ sl_Slideshow.prototype = {
 		menu.css("position","absolute");
 		var i = js.JQuery("<a href=\"#\"></a>");
 		i.addClass("slInfo");
+		i.css("display",this.infosOpen?"none":"block");
 		i.click(function() {
 			_g.infosOpen = true;
 			_g.graphicMsg.fadeIn(500);
-			i.css("display","none");
+			i.fadeOut(500);
 			return true;
 		});
 		menu.append(i);
