@@ -16,6 +16,14 @@ a:hover { text-decoration: underline; }
 	background-color:#000;
 }
 
+.sl>div {
+	/*position: relative;
+	width: 100%;
+	height: 100%;*/
+	box-sizing: border-box;
+	position:absolute;
+}
+
 .sl figcaption {
 	
 	max-width: 50%;
@@ -44,30 +52,37 @@ a:hover { text-decoration: underline; }
 	height: 32px;
 	position: absolute;
 	box-sizing: border-box;
-	margin: 10px;
+	margin: 4px;
 	text-align:center;
 	/*border-left:1px solid #FFF;
 	background-color: rgba( 0, 0, 0, 0.5 );*/
 	
-	background-image: url("sl-icons.svg");
+	background-image: url("sl-icons.min.svg");
+	
+	opacity:0.8;
 	
 	border:1px rgba(0,0,0,0) solid;
 	transition: border 0.2s ease-out;
 }
 
 .sl .menu a:hover,
-.sl figcaption .slClose:hover
-.sl .thumbs .slClose {
+.sl figcaption .slClose:hover,
+.sl .thumbs .slClose:hover {
 
 	border-color: rgba(255,255,255,1);
 }
 
-.sl figcaption .slClose {
+.sl figcaption .slClose,
+.sl .thumbs .slClose {
 	
 	top: 0;
 	right: 0;
 	
 	background-position: -64px -32px;
+}
+
+.sl figcaption .slClose {
+	z-index: 2;
 }
 
 /*.sl .menu a:first-child {
@@ -85,28 +100,28 @@ a:hover { text-decoration: underline; }
 .sl .menu .slLeft {
 	
 	bottom: 0;
-	right: 180px;
+	right: 168px;
 	
 	background-position: -32px 0;
 }
 .sl .menu .slPlay {
 	
 	bottom: 0;
-	right: 140px;
+	right: 132px;
 	
 	background-position: -96px 0;
 }
 .sl .menu .slPause {
 	
 	bottom: 0;
-	right: 140px;
+	right: 132px;
 	
 	background-position: -64px 0;
 }
 .sl .menu .slRight {
 	
 	bottom: 0;
-	right: 100px;
+	right: 96px;
 	
 	background-position: 0 0;
 }
@@ -134,13 +149,14 @@ a:hover { text-decoration: underline; }
 }
 
 .sl .thumbs {
-	width: 100%;
-	height: 100%;
+	/*width: 100%;
+	height: 100%;*/
 	padding: 24px;
 	overflow: auto;
 	box-sizing: border-box;
 	text-align: center;
 	background-color: rgba(0, 0, 0, 0.95);
+	z-index:3;
 }
 
 .sl .thumb {

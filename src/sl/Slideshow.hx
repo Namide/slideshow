@@ -36,18 +36,15 @@ class Slideshow
 		html.prepend("<div></div>");
 		
 		graphicImgs = new JQuery(html.find("div")[0]);
-		graphicMenu = new JQuery(html.find("div")[1]);
-		graphicMsg = new JQuery(html.find("div")[2]);
+		graphicMsg = new JQuery(html.find("div")[1]);
+		graphicMenu = new JQuery(html.find("div")[2]);
 		graphicThumbs = new JQuery(html.find("div")[3]);
 		
-		var close = new JQuery("<a href=\"#\"></a>");
-		close.addClass("slClose");
-		//close.css("zIndex", "5");
-		close.click(function() { graphicThumbs.fadeOut(500); return true; } );
-		graphicThumbs.prepend(close);
+		graphicMsg.addClass("msgs");
+		
 		
 		graphicThumbs.addClass("thumbs");
-		graphicThumbs.css("position", "relative");
+		//graphicThumbs.css("position", "relative");
 		graphicThumbs.click(function() { graphicThumbs.fadeOut(500); return true; } );
 		graphicThumbs.css("display", "none");
 		
@@ -69,7 +66,7 @@ class Slideshow
 			
 			
 			
-			close = new JQuery("<a href=\"#\"></a>");
+			var close = new JQuery("<a href=\"#\"></a>");
 			close.addClass("slClose");
 			//close.css("zIndex", "1");
 			//i.css("textDecoration", (infosOpen) ? "line-through" : "none" );
@@ -121,9 +118,18 @@ class Slideshow
 			graphicThumbs.append(thumb);
 			
 		});
+		
+		
 		html.find(">li").each(function(id:Int, elmt:Element) {
 			new JQuery(elmt).remove();
 		});
+		
+		
+		var close = new JQuery("<a href=\"#\"></a>");
+		close.addClass("slClose");
+		//close.css("zIndex", "5");
+		close.click(function() { graphicThumbs.fadeOut(500); return true; } );
+		graphicThumbs.append(close);
 		
 		
 		go(current);
@@ -354,6 +360,21 @@ class Slideshow
 	}
 	
 	public function onResize(?evt:js.JqEvent) {
+		
+		var w = html.width();
+		var h = html.height();
+		
+		graphicImgs.css("width", w + "px");
+		graphicImgs.css("height", h + "px");
+		
+		graphicMsg.css("width", w + "px");
+		graphicMsg.css("height", h + "px");
+		
+		graphicThumbs.css("width", w + "px");
+		graphicThumbs.css("height", h + "px");
+		
+		graphicMenu.css("width", w + "px");
+		graphicMenu.css("height", h + "px");
 		
 		resizeSlide();
 	}

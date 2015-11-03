@@ -87,18 +87,11 @@ var sl_Slideshow = function(slElmt) {
 	this.html.prepend("<div></div>");
 	this.html.prepend("<div></div>");
 	this.graphicImgs = js.JQuery(this.html.find("div")[0]);
-	this.graphicMenu = js.JQuery(this.html.find("div")[1]);
-	this.graphicMsg = js.JQuery(this.html.find("div")[2]);
+	this.graphicMsg = js.JQuery(this.html.find("div")[1]);
+	this.graphicMenu = js.JQuery(this.html.find("div")[2]);
 	this.graphicThumbs = js.JQuery(this.html.find("div")[3]);
-	var close = js.JQuery("<a href=\"#\"></a>");
-	close.addClass("slClose");
-	close.click(function() {
-		_g.graphicThumbs.fadeOut(500);
-		return true;
-	});
-	this.graphicThumbs.prepend(close);
+	this.graphicMsg.addClass("msgs");
 	this.graphicThumbs.addClass("thumbs");
-	this.graphicThumbs.css("position","relative");
 	this.graphicThumbs.click(function() {
 		_g.graphicThumbs.fadeOut(500);
 		return true;
@@ -113,15 +106,15 @@ var sl_Slideshow = function(slElmt) {
 		_g.allSlides.push(slide);
 		_g.graphicImgs.append(slide.img.html);
 		_g.graphicMsg.append(slide.text.html);
-		close = js.JQuery("<a href=\"#\"></a>");
-		close.addClass("slClose");
-		close.click(function() {
+		var close1 = js.JQuery("<a href=\"#\"></a>");
+		close1.addClass("slClose");
+		close1.click(function() {
 			_g.infosOpen = false;
 			_g.graphicMsg.fadeOut(500);
 			_g.html.find(".slInfo").fadeIn(500);
 			return true;
 		});
-		slide.text.html.prepend(close);
+		slide.text.html.prepend(close1);
 		var thumb = slide.thumb;
 		thumb.attr("id","slThumb" + id1);
 		thumb.addClass("thumb");
@@ -137,6 +130,13 @@ var sl_Slideshow = function(slElmt) {
 	this.html.find(">li").each(function(id2,elmt1) {
 		js.JQuery(elmt1).remove();
 	});
+	var close = js.JQuery("<a href=\"#\"></a>");
+	close.addClass("slClose");
+	close.click(function() {
+		_g.graphicThumbs.fadeOut(500);
+		return true;
+	});
+	this.graphicThumbs.append(close);
 	this.go(this.current);
 	this.play(false);
 	this.initMenu();
@@ -276,6 +276,16 @@ sl_Slideshow.prototype = {
 		this.resizeSlide(slide);
 	}
 	,onResize: function(evt) {
+		var w = this.html.width();
+		var h = this.html.height();
+		this.graphicImgs.css("width",w + "px");
+		this.graphicImgs.css("height",h + "px");
+		this.graphicMsg.css("width",w + "px");
+		this.graphicMsg.css("height",h + "px");
+		this.graphicThumbs.css("width",w + "px");
+		this.graphicThumbs.css("height",h + "px");
+		this.graphicMenu.css("width",w + "px");
+		this.graphicMenu.css("height",h + "px");
 		this.resizeSlide();
 	}
 	,resizeSlide: function(slide,w,h,p) {
