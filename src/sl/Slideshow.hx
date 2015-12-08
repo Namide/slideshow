@@ -54,12 +54,14 @@ class Slideshow
 		
 		allSlides = [];
 		filteredSlides = [];
+		var max = html.find(">li").length;
 		html.find(">li").each(function(id:Int, elmt:Element) {
 			
 			var id = allSlides.length;
 			
 			addSlide(id);
 			var slide = new Slide(elmt);
+			slide.text.update(id + 1, max);
 			allSlides.push(slide);
 			graphicImgs.append(slide.img.html);
 			graphicMsg.append(slide.text.html);

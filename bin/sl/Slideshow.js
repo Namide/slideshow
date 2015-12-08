@@ -99,10 +99,12 @@ var sl_Slideshow = function(slElmt) {
 	this.graphicThumbs.css("display","none");
 	this.allSlides = [];
 	this.filteredSlides = [];
+	var max = this.html.find(">li").length;
 	this.html.find(">li").each(function(id,elmt) {
 		var id1 = _g.allSlides.length;
 		_g.addSlide(id1);
 		var slide = new sl_Slide(elmt);
+		slide.text.update(id1 + 1,max);
 		_g.allSlides.push(slide);
 		_g.graphicImgs.append(slide.img.html);
 		_g.graphicMsg.append(slide.text.html);
@@ -326,6 +328,12 @@ sl_TextElmt.prototype = $extend(sl_Elmt.prototype,{
 	,hide: function(t) {
 		if(t == null) t = 500;
 		this.html.hide(t);
+	}
+	,update: function(num,max) {
+		var t = this.html.html();
+		t = t.split("{{num}}").join(num == null?"null":"" + num);
+		t = t.split("{{max}}").join(max == null?"null":"" + max);
+		this.html.html(t);
 	}
 });
 var $_, $fid = 0;

@@ -34,7 +34,7 @@ module.exports = function (grunt) {
 			},
 			dist: {
 				files: {
-					'www/sl/sl.min.css': [ 'bin/sl/slStyle.css' ]
+					'www/sl/sl.min.css': [ 'bin/sl/slStyle.css', 'bin/sl/slFullscreenStyle.css' ]
 				}
 			}
 		},
