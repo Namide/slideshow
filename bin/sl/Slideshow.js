@@ -5,19 +5,98 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
+Math.__name__ = true;
 var Std = function() { };
+Std.__name__ = true;
+Std.string = function(s) {
+	return js_Boot.__string_rec(s,"");
+};
+Std["int"] = function(x) {
+	return x | 0;
+};
 Std.parseFloat = function(x) {
 	return parseFloat(x);
+};
+var js_Boot = function() { };
+js_Boot.__name__ = true;
+js_Boot.__string_rec = function(o,s) {
+	if(o == null) return "null";
+	if(s.length >= 5) return "<...>";
+	var t = typeof(o);
+	if(t == "function" && (o.__name__ || o.__ename__)) t = "object";
+	switch(t) {
+	case "object":
+		if(o instanceof Array) {
+			if(o.__enum__) {
+				if(o.length == 2) return o[0];
+				var str2 = o[0] + "(";
+				s += "\t";
+				var _g1 = 2;
+				var _g = o.length;
+				while(_g1 < _g) {
+					var i1 = _g1++;
+					if(i1 != 2) str2 += "," + js_Boot.__string_rec(o[i1],s); else str2 += js_Boot.__string_rec(o[i1],s);
+				}
+				return str2 + ")";
+			}
+			var l = o.length;
+			var i;
+			var str1 = "[";
+			s += "\t";
+			var _g2 = 0;
+			while(_g2 < l) {
+				var i2 = _g2++;
+				str1 += (i2 > 0?",":"") + js_Boot.__string_rec(o[i2],s);
+			}
+			str1 += "]";
+			return str1;
+		}
+		var tostr;
+		try {
+			tostr = o.toString;
+		} catch( e ) {
+			return "???";
+		}
+		if(tostr != null && tostr != Object.toString && typeof(tostr) == "function") {
+			var s2 = o.toString();
+			if(s2 != "[object Object]") return s2;
+		}
+		var k = null;
+		var str = "{\n";
+		s += "\t";
+		var hasp = o.hasOwnProperty != null;
+		for( var k in o ) {
+		if(hasp && !o.hasOwnProperty(k)) {
+			continue;
+		}
+		if(k == "prototype" || k == "__class__" || k == "__super__" || k == "__interfaces__" || k == "__properties__") {
+			continue;
+		}
+		if(str.length != 2) str += ", \n";
+		str += s + k + " : " + js_Boot.__string_rec(o[k],s);
+		}
+		s = s.substring(1);
+		str += "\n" + s + "}";
+		return str;
+	case "function":
+		return "<function>";
+	case "string":
+		return o;
+	default:
+		return String(o);
+	}
 };
 var sl_Elmt = function(elmt) {
 	this.html = js.JQuery(elmt);
 	this.html.css("position","absolute");
 };
+sl_Elmt.__name__ = true;
 var sl_GraphicElmt = function(elmt) {
 	sl_Elmt.call(this,elmt);
 	this.type = this.html.get(0).nodeName.toLowerCase();
 	if(this.type == "img") this.src = this.html.attr("src"); else if(this.type == "video") this.src = this.html.filter("source").attr("src");
 };
+sl_GraphicElmt.__name__ = true;
 sl_GraphicElmt.__super__ = sl_Elmt;
 sl_GraphicElmt.prototype = $extend(sl_Elmt.prototype,{
 	show: function(t) {
@@ -44,6 +123,7 @@ var sl_Main = function() {
 	this.slideshows = [];
 	js.JQuery(".sl").each($bind(this,this.initSlideshow));
 };
+sl_Main.__name__ = true;
 sl_Main.main = function() {
 	js.JQuery(window).ready(function(evt) {
 		sl_Main.MAIN = new sl_Main();
@@ -65,6 +145,7 @@ var sl_Slide = function(elmt) {
 	this.img.html.attr("data-thumb","");
 	this.hide(0);
 };
+sl_Slide.__name__ = true;
 sl_Slide.prototype = {
 	show: function(t) {
 		if(t == null) t = 1000;
@@ -108,7 +189,7 @@ var sl_Slideshow = function(slElmt) {
 		_g.allSlides.push(slide);
 		_g.graphicImgs.append(slide.img.html);
 		_g.graphicMsg.append(slide.text.html);
-		var close1 = js.JQuery("<a href=\"#\"></a>");
+		var close1 = js.JQuery("<a></a>");
 		close1.addClass("slClose");
 		close1.click(function() {
 			_g.infosOpen = false;
@@ -132,21 +213,31 @@ var sl_Slideshow = function(slElmt) {
 	this.html.find(">li").each(function(id2,elmt1) {
 		js.JQuery(elmt1).remove();
 	});
-	var close = js.JQuery("<a href=\"#\"></a>");
+	var close = js.JQuery("<a></a>");
 	close.addClass("slClose");
 	close.click(function() {
 		_g.graphicThumbs.fadeOut(500);
 		return true;
 	});
 	this.graphicThumbs.append(close);
-	this.go(this.current);
+	if(!this.checkHash()) this.go(this.current);
 	this.play(false);
 	this.initMenu();
 	js.JQuery(window).resize($bind(this,this.onResize));
 	this.html.resize($bind(this,this.onResize));
+	js.JQuery(window).bind("hashchange",function(e) {
+		_g.checkHash();
+	});
 };
+sl_Slideshow.__name__ = true;
 sl_Slideshow.prototype = {
-	play: function(changeImg) {
+	checkHash: function() {
+		var hash = window.location.hash.substring(1);
+		if(hash == "" || Std["int"](parseFloat(hash)) == this.current + 1) return false;
+		this.go(Std["int"](parseFloat(hash)) - 1);
+		return true;
+	}
+	,play: function(changeImg) {
 		if(changeImg == null) changeImg = true;
 		if(changeImg) this.go(this.current + 1);
 		window.clearTimeout(this.playing);
@@ -187,7 +278,7 @@ sl_Slideshow.prototype = {
 		var menu = js.JQuery(this.graphicMenu.find("div")[0]);
 		menu.addClass("menu");
 		menu.css("position","absolute");
-		var i = js.JQuery("<a href=\"#\"></a>");
+		var i = js.JQuery("<a></a>");
 		i.addClass("slInfo");
 		i.css("display",this.infosOpen?"none":"block");
 		i.click(function() {
@@ -197,7 +288,7 @@ sl_Slideshow.prototype = {
 			return true;
 		});
 		menu.append(i);
-		var left = js.JQuery("<a href=\"#\"></a>");
+		var left = js.JQuery("<a></a>");
 		left.addClass("slLeft");
 		left.click(function() {
 			_g.pause();
@@ -205,21 +296,21 @@ sl_Slideshow.prototype = {
 			return true;
 		});
 		menu.append(left);
-		var playUI = js.JQuery("<a href=\"#\"></a>");
+		var playUI = js.JQuery("<a></a>");
 		playUI.addClass("slPlay");
 		playUI.click(function() {
 			_g.play();
 			return true;
 		});
 		menu.append(playUI);
-		var pauseUI = js.JQuery("<a href=\"#\"></a>");
+		var pauseUI = js.JQuery("<a></a>");
 		pauseUI.addClass("slPause");
 		pauseUI.click(function() {
 			_g.pause();
 			return true;
 		});
 		menu.append(pauseUI);
-		var right = js.JQuery("<a href=\"#\"></a>");
+		var right = js.JQuery("<a></a>");
 		right.addClass("slRight");
 		right.click(function() {
 			_g.pause();
@@ -227,7 +318,7 @@ sl_Slideshow.prototype = {
 			return true;
 		});
 		menu.append(right);
-		var M = js.JQuery("<a href=\"#\"></a>");
+		var M = js.JQuery("<a></a>");
 		M.addClass("slMenu");
 		M.click(function() {
 			_g.pause();
@@ -239,8 +330,8 @@ sl_Slideshow.prototype = {
 		});
 		menu.append(M);
 		if(Screenfull.enabled) {
-			var f = js.JQuery("<a href=\"#\"></a>");
-			var w = js.JQuery("<a href=\"#\"></a>");
+			var f = js.JQuery("<a></a>");
+			var w = js.JQuery("<a></a>");
 			f.addClass("slFullscreen");
 			w.addClass("slWindowed");
 			f.click(function() {
@@ -276,6 +367,7 @@ sl_Slideshow.prototype = {
 		slide = this.allSlides[this.current];
 		slide.show();
 		this.resizeSlide(slide);
+		window.location.href = "#" + Std.string(this.current + 1);
 	}
 	,onResize: function(evt) {
 		var w = this.html.width();
@@ -319,6 +411,7 @@ sl_Slideshow.prototype = {
 var sl_TextElmt = function(elmt) {
 	sl_Elmt.call(this,elmt);
 };
+sl_TextElmt.__name__ = true;
 sl_TextElmt.__super__ = sl_Elmt;
 sl_TextElmt.prototype = $extend(sl_Elmt.prototype,{
 	show: function(t) {
@@ -338,10 +431,10 @@ sl_TextElmt.prototype = $extend(sl_Elmt.prototype,{
 });
 var $_, $fid = 0;
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $fid++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = function(){ return f.method.apply(f.scope, arguments); }; f.scope = o; f.method = m; o.hx__closures__[m.__id__] = f; } return f; }
+String.__name__ = true;
+Array.__name__ = true;
 var q = window.jQuery;
 var js = js || {}
 js.JQuery = q;
 sl_Main.main();
 })(typeof console != "undefined" ? console : {log:function(){}});
-
-//# sourceMappingURL=Slideshow.js.map

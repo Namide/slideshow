@@ -68,7 +68,7 @@ class Slideshow
 			
 			
 			
-			var close = new JQuery("<a href=\"#\"></a>");
+			var close = new JQuery("<a></a>");
 			close.addClass("slClose");
 			//close.css("zIndex", "1");
 			//i.css("textDecoration", (infosOpen) ? "line-through" : "none" );
@@ -86,7 +86,7 @@ class Slideshow
 			
 			
 			
-			/*var thumb = new JQuery("<a href=\"#\"></a>");
+			/*var thumb = new JQuery("<a></a>");
 			thumb.append(slide.thumb);
 			thumb.click(function() { go(id); return true; } );
 			graphicThumbs.append(thumb);*/
@@ -127,14 +127,17 @@ class Slideshow
 		});
 		
 		
-		var close = new JQuery("<a href=\"#\"></a>");
+		var close = new JQuery("<a></a>");
 		close.addClass("slClose");
 		//close.css("zIndex", "5");
 		close.click(function() { graphicThumbs.fadeOut(500); return true; } );
 		graphicThumbs.append(close);
 		
 		
-		go(current);
+		if (!checkHash())
+			go(current);
+			
+		
 		play(false);
 		
 		
@@ -147,7 +150,27 @@ class Slideshow
 		
 		new JQuery(Browser.window).resize(onResize);
 		html.resize(onResize);
+		
+		
+		
+		
+		new JQuery(Browser.window).bind('hashchange', function (e:Dynamic) {
+			checkHash();
+		});
+		
 	}
+	
+	function checkHash() {
+		
+		var hash = Browser.window.location.hash.substring(1);
+		
+		if (hash == "" || Std.int(Std.parseFloat(hash)) == current + 1)
+			return false;
+		
+		go(Std.int(Std.parseFloat(hash)) - 1);
+		return true;
+	}
+	
 	
 	public function play(changeImg = true) {
 		
@@ -216,7 +239,7 @@ class Slideshow
 		menu.css("position", "absolute");
 		
 		// i
-		var i = new JQuery("<a href=\"#\"></a>");
+		var i = new JQuery("<a></a>");
 		i.addClass("slInfo");
 		i.css("display", (infosOpen) ? "none" : "block" );
 		i.click(function() {
@@ -238,7 +261,7 @@ class Slideshow
 		menu.append(i);
 		
 		// Ӏ<
-		var left = new JQuery("<a href=\"#\"></a>");
+		var left = new JQuery("<a></a>");
 		left.addClass("slLeft");
 		left.click(function() {
 			
@@ -250,7 +273,7 @@ class Slideshow
 		menu.append(left);
 		
 		// ■ ►
-		var playUI = new JQuery("<a href=\"#\"></a>");
+		var playUI = new JQuery("<a></a>");
 		playUI.addClass("slPlay");
 		playUI.click(function() {
 			
@@ -260,7 +283,7 @@ class Slideshow
 		menu.append(playUI);
 		
 		// ■ ►
-		var pauseUI = new JQuery("<a href=\"#\"></a>");
+		var pauseUI = new JQuery("<a></a>");
 		pauseUI.addClass("slPause");
 		pauseUI.click(function() {
 			
@@ -270,7 +293,7 @@ class Slideshow
 		menu.append(pauseUI);
 		
 		// >Ӏ
-		var right = new JQuery("<a href=\"#\"></a>");
+		var right = new JQuery("<a></a>");
 		right.addClass("slRight");
 		right.click(function() {
 			
@@ -283,7 +306,7 @@ class Slideshow
 		
 		
 		// M ͏Ξ
-		var M = new JQuery("<a href=\"#\"></a>");
+		var M = new JQuery("<a></a>");
 		M.addClass("slMenu");
 		M.click(function() {
 			//graphicThumbs.find("#slThumb" + current).css("borderColor", "#FFF");
@@ -302,8 +325,8 @@ class Slideshow
 		// ۞ □
 		if (Screenfull.enabled) {
 			
-			var f = new JQuery("<a href=\"#\"></a>");
-			var w = new JQuery("<a href=\"#\"></a>");
+			var f = new JQuery("<a></a>");
+			var w = new JQuery("<a></a>");
 			
 			f.addClass("slFullscreen");
 			w.addClass("slWindowed");
@@ -359,6 +382,9 @@ class Slideshow
 		slide = allSlides[current];
 		slide.show();
 		resizeSlide(slide);
+		
+		//trace(current);
+		Browser.window.location.href = "#" + Std.string(current + 1);
 	}
 	
 	public function onResize(?evt:js.JqEvent) {
