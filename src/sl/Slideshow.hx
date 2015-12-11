@@ -143,6 +143,7 @@ class Slideshow
 		
 		
 		initMenu();
+		initKeys();
 		
 		
 		//resizeAll();
@@ -230,6 +231,69 @@ class Slideshow
 		}
 	}
 	
+	function initKeys() {
+		
+		new JQuery(Browser.document.documentElement).keydown(function(e:Dynamic) {
+			
+			switch(e.which) {
+				
+				case 37 :
+					pause();
+					go (current - 1);
+					
+				case 39 : 
+					pause();
+					go (current + 1);
+					
+				case 38 :
+					
+					var f = html.find(".slFullscreen");
+					var w = html.find(".slWindowed");
+					
+					if (Screenfull.isFullscreen) {
+						
+						Screenfull.exit();
+						f.css("display", "block");
+						w.css("display", "none");
+						
+					} else {
+						
+						Screenfull.request(html.get(0));
+						w.css("display", "block");
+						f.css("display", "none");
+						
+					}
+					
+				case 40 :
+					
+					var i = html.find(".slInfo");
+					//trace(i);
+					infosOpen = !infosOpen;
+					if (infosOpen) {
+						graphicMsg.fadeIn(500);
+						i.fadeOut(500);
+					} else {
+						graphicMsg.fadeOut(500);
+						i.fadeIn(500);
+					}
+					
+					
+					//infosOpen = false;
+					//graphicMsg.fadeOut(500);
+					//html.find(".slInfo").fadeIn(500);
+					
+				case 13 :
+				
+					if (playing > -1)
+						pause();
+					else
+						play();
+			}
+			e.preventDefault();
+		});
+		
+	}
+	
 	public function initMenu() {
 		
 		graphicMenu.prepend("<div></div>");
@@ -291,6 +355,7 @@ class Slideshow
 			return true;
 		} );
 		menu.append(pauseUI);
+		pauseUI.css("display", "none");
 		
 		// >Ӏ
 		var right = new JQuery("<a></a>");

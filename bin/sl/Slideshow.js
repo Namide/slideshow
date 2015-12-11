@@ -223,6 +223,7 @@ var sl_Slideshow = function(slElmt) {
 	if(!this.checkHash()) this.go(this.current);
 	this.play(false);
 	this.initMenu();
+	this.initKeys();
 	js.JQuery(window).resize($bind(this,this.onResize));
 	this.html.resize($bind(this,this.onResize));
 	js.JQuery(window).bind("hashchange",function(e) {
@@ -272,6 +273,50 @@ sl_Slideshow.prototype = {
 			thumb.css("margin","0 " + Math.round((wMax - thumb.width()) / 2) + "px");
 		}
 	}
+	,initKeys: function() {
+		var _g1 = this;
+		js.JQuery(window.document.documentElement).keydown(function(e) {
+			var _g = e.which;
+			switch(_g) {
+			case 37:
+				_g1.pause();
+				_g1.go(_g1.current - 1);
+				break;
+			case 39:
+				_g1.pause();
+				_g1.go(_g1.current + 1);
+				break;
+			case 38:
+				var f = _g1.html.find(".slFullscreen");
+				var w = _g1.html.find(".slWindowed");
+				if(Screenfull.isFullscreen) {
+					Screenfull.exit();
+					f.css("display","block");
+					w.css("display","none");
+				} else {
+					Screenfull.request(_g1.html.get(0));
+					w.css("display","block");
+					f.css("display","none");
+				}
+				break;
+			case 40:
+				var i = _g1.html.find(".slInfo");
+				_g1.infosOpen = !_g1.infosOpen;
+				if(_g1.infosOpen) {
+					_g1.graphicMsg.fadeIn(500);
+					i.fadeOut(500);
+				} else {
+					_g1.graphicMsg.fadeOut(500);
+					i.fadeIn(500);
+				}
+				break;
+			case 13:
+				if(_g1.playing > -1) _g1.pause(); else _g1.play();
+				break;
+			}
+			e.preventDefault();
+		});
+	}
 	,initMenu: function() {
 		var _g = this;
 		this.graphicMenu.prepend("<div></div>");
@@ -310,6 +355,7 @@ sl_Slideshow.prototype = {
 			return true;
 		});
 		menu.append(pauseUI);
+		pauseUI.css("display","none");
 		var right = js.JQuery("<a></a>");
 		right.addClass("slRight");
 		right.click(function() {
