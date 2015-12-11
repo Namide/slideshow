@@ -150,12 +150,12 @@ sl_Slide.prototype = {
 	show: function(t) {
 		if(t == null) t = 1000;
 		this.img.show(t);
-		this.text.html.show(t);
+		this.text.html.css("opacity","1");
 	}
 	,hide: function(t) {
 		if(t == null) t = 1000;
 		this.img.hide(t);
-		this.text.html.hide(t);
+		this.text.html.css("opacity","0");
 	}
 };
 var sl_Slideshow = function(slElmt) {
@@ -462,11 +462,11 @@ sl_TextElmt.__super__ = sl_Elmt;
 sl_TextElmt.prototype = $extend(sl_Elmt.prototype,{
 	show: function(t) {
 		if(t == null) t = 500;
-		this.html.show(t);
+		this.html.css("opacity","1");
 	}
 	,hide: function(t) {
 		if(t == null) t = 500;
-		this.html.hide(t);
+		this.html.css("opacity","0");
 	}
 	,update: function(num,max) {
 		var t = this.html.html();

@@ -9,11 +9,13 @@ import js.JQuery;
 class TextElmt extends Elmt
 {
 	public inline function show(t = 500) {
-		html.show(t);
+		//html.show(t);
+		html.css("opacity", "1");
 	}
 	
 	public inline function hide(t = 500) {
-		html.hide(t);
+		//html.hide(t);
+		html.css("opacity", "0");
 	}
 	
 	public function update( num:Int, max:Int ) {
