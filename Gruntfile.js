@@ -7,7 +7,8 @@ module.exports = function (grunt) {
 				separator: ';',
 			},
 			dist: {
-				src: [	'bin/sl/jquery-1.11.3.min.js',
+				src: [	'bin/sl/jquery-2.1.4.min.js',//'bin/sl/jquery-1.11.3.min.js',
+						'bin/sl/jquery.mobile.custom.min.js',
 					  	'bin/sl/Screenfull.js',
 					  	'bin/sl/Slideshow.js'
 					 ],

@@ -144,6 +144,7 @@ class Slideshow
 		
 		initMenu();
 		initKeys();
+		initMobile();
 		
 		
 		//resizeAll();
@@ -229,6 +230,22 @@ class Slideshow
 			thumb.width(Math.round(hMax * p));
 			thumb.css("margin", "0 " + Math.round((wMax - thumb.width()) / 2) + "px");
 		}
+	}
+	
+	function initMobile() {
+		
+		var d = new JQuery(Browser.document.documentElement);
+		
+		d.on("swipeleft",function(e:Dynamic){
+			pause();
+			go (current + 1);
+		});
+		
+		d.on("swiperight",function(e:Dynamic){
+			pause();
+			go (current - 1);
+		});
+		
 	}
 	
 	function initKeys() {

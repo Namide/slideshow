@@ -224,6 +224,7 @@ var sl_Slideshow = function(slElmt) {
 	this.play(false);
 	this.initMenu();
 	this.initKeys();
+	this.initMobile();
 	js.JQuery(window).resize($bind(this,this.onResize));
 	this.html.resize($bind(this,this.onResize));
 	js.JQuery(window).bind("hashchange",function(e) {
@@ -272,6 +273,18 @@ sl_Slideshow.prototype = {
 			thumb.width(Math.round(hMax * p));
 			thumb.css("margin","0 " + Math.round((wMax - thumb.width()) / 2) + "px");
 		}
+	}
+	,initMobile: function() {
+		var _g = this;
+		var d = js.JQuery(window.document.documentElement);
+		d.on("swipeleft",function(e) {
+			_g.pause();
+			_g.go(_g.current + 1);
+		});
+		d.on("swiperight",function(e1) {
+			_g.pause();
+			_g.go(_g.current - 1);
+		});
 	}
 	,initKeys: function() {
 		var _g1 = this;
