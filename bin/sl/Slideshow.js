@@ -285,6 +285,9 @@ sl_Slideshow.prototype = {
 			_g.pause();
 			_g.go(_g.current - 1);
 		});
+		d.on("orientationchange",function(e2) {
+			_g.onResize(e2);
+		});
 	}
 	,initKeys: function() {
 		var _g1 = this;

@@ -156,7 +156,7 @@ class Slideshow
 		
 		
 		
-		new JQuery(Browser.window).bind('hashchange', function (e:Dynamic) {
+		new JQuery(Browser.window).bind('hashchange', function (?e:js.JqEvent) {
 			checkHash();
 		});
 		
@@ -236,21 +236,24 @@ class Slideshow
 		
 		var d = new JQuery(Browser.document.documentElement);
 		
-		d.on("swipeleft",function(e:Dynamic){
+		d.on("swipeleft",function(?e:js.JqEvent){
 			pause();
 			go (current + 1);
 		});
 		
-		d.on("swiperight",function(e:Dynamic){
+		d.on("swiperight",function(?e:js.JqEvent){
 			pause();
 			go (current - 1);
 		});
 		
+		d.on("orientationchange",function(?e:js.JqEvent){
+			onResize(e);
+		});
 	}
 	
 	function initKeys() {
 		
-		new JQuery(Browser.document.documentElement).keydown(function(e:Dynamic) {
+		new JQuery(Browser.document.documentElement).keydown(function(?e:js.JqEvent) {
 			
 			switch(e.which) {
 				
